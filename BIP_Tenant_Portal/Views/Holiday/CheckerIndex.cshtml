@@ -1,0 +1,106 @@
+﻿@model List<Holiday>
+@{
+    ViewData["Title"] = "Holiday Master";
+}
+
+@section Styles {
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-select-bs4/css/select.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    @* <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> *@
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+    <style>
+        form {
+            float: left;
+            margin-right: 10px;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Holiday Calendar</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Home</a></li>
+                    <li class="breadcrumb-item active">Holiday Calendar</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-wrapper">
+                    <table id="usersTable" class="table dt-responsive nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var holiday in Model)
+                                {
+                                    <tr>
+                                        <td>@holiday.HolidayName</td>
+                                        <td>@holiday.HolidayDate.ToShortDateString()</td>
+                                        <td>@holiday.HolidayType</td>
+                                        <td>
+                                            <form method="post" asp-action="ApproveHoliday">
+                                                <input type="hidden" name="id" value="@holiday.Id" />
+                                                <button type="submit" class="btn btn-success">Approve</button>
+                                            </form>
+                                            <form method="post" asp-action="RejectHoliday">
+                                                <input type="hidden" name="id" value="@holiday.Id" />
+                                                <button type="submit" class="btn btn-danger">Reject</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/js/pages/form-validation.init.js"></script>
+
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/jszip/jszip.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    @* <script src="~/assets/libs/datatables.net-keyTable/js/dataTables.keyTable.min.html"></script> *@
+    <script src="~/assets/libs/datatables.net-select/js/dataTables.select.min.js"></script>
+
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    @* <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script> *@
+
+    <script src="~/assets/js/pages/datatables.init.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#usersTable').DataTable();
+        });
+    </script>
+}

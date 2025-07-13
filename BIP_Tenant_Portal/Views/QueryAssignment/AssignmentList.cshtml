@@ -1,0 +1,138 @@
+﻿@{
+    ViewData["Title"] = "Query Assignment List";
+}
+
+@section Styles {
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-select-bs4/css/select.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    @* <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> *@
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+}
+@model IEnumerable<BIP_Tenant_Portal.Models.QueryAssignmentModel>
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Query Assignment List</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Service Management</a></li>
+                    <li class="breadcrumb-item active">Query Assignment List</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-wrapper">
+                    <table id="usersTable" class="table dt-responsive nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th>Action</th>
+                                <th>Service RequestID</th>
+                                <th>Tenant Name</th>
+                                <th>Property Name</th>
+                                <th>Unit Number</th>
+                                <th>Service Provider</th>
+                                <th>Assigned On</th>
+                                <th>Status</th>
+                                <th>Status ChangedOn</th>
+                                <th>Hours</th>
+                                <th>Building Code</th>
+                                <th>Flat Type</th>
+                                <th>Assigned By</th>
+                                <th>Description</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @if (Model != null && !Model.Any())
+                            {
+                                <tr>
+                                    <td colspan="14" style="text-align:center;">Loading...</td>
+                                </tr>
+                            }
+                            else if (Model != null && Model.Any())
+                            {
+                                foreach (var modelItem in Model)
+                                {
+                                    string badgeClass = modelItem.QueryAssignmentDetails!.Status switch
+                                    {
+                                        "Open" => "badge-primary",
+                                        "Scheduled" => "badge-info",
+                                        "InProgress" => "badge-warning",
+                                        "OnHold" => "badge-secondary",
+                                        "Resolved" => "badge-success",
+                                        "ReOpened" => "badge-danger",
+                                        "ReAssigned" => "badge-pink",
+                                        _ => "badge-light" // Default badge
+                                    };
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("Update", "QueryAssignment", new { id = modelItem.QueryAssignmentDetails.AssignmentID })" class="btn btn-success btn-sm" style="margin-top: -10px;">Edit</a>
+                                        </td>
+                                        <td>@Html.DisplayFor(m => modelItem.QueryAssignmentDetails.ServiceRequestNumber)</td>
+                                        <td>@Html.DisplayFor(m => modelItem.TenantName)</td>
+                                        <td>@Html.DisplayFor(m => modelItem.PropertyName)</td>
+                                        <td>@Html.DisplayFor(m => modelItem.FlatNumber)</td>
+                                        <td>@Html.DisplayFor(m => modelItem.TechnicianName)</td>
+                                        <td>@(modelItem.QueryAssignmentDetails.AssignedOn?.ToString("dd-MM-yyyy hh:mm tt"))</td>
+                                        <td><span class="badge @badgeClass"> @Html.DisplayFor(m => modelItem.QueryAssignmentDetails.Status)</span></td>
+                                        <td>@(modelItem.QueryAssignmentDetails.StatusChangedOn?.ToString("dd-MM-yyyy hh:mm tt"))</td>
+                                        <td>@Html.DisplayFor(m => modelItem.QueryAssignmentDetails.DurationFromRaisedOn)</td>
+                                        <td>@Html.DisplayFor(m => modelItem.BuildingCode)</td>
+                                        <td>@Html.DisplayFor(m => modelItem.FlatType)</td>
+                                        <td>@Html.DisplayFor(m => modelItem.QueryAssignmentDetails.AssignedBy)</td>
+                                        <td>@Html.DisplayFor(m => modelItem.QueryAssignmentDetails.Description)</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="10" style="text-align:center;">No data available</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/jszip/jszip.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    @* <script src="~/assets/libs/datatables.net-keyTable/js/dataTables.keyTable.min.html"></script> *@
+    <script src="~/assets/libs/datatables.net-select/js/dataTables.select.min.js"></script>
+
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    @* <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script> *@
+
+    <script src="~/assets/js/pages/datatables.init.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#usersTable').DataTable();
+        });
+    </script>
+
+    <script>
+        var UserID = "@ViewBag.UserID";
+    </script>
+}

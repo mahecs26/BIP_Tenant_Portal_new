@@ -1,0 +1,181 @@
+﻿﻿@using Newtonsoft.Json
+@using Microsoft.Extensions.Configuration
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+@inject IConfiguration Configuration
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewData["Title"] - BIP Tenant Portal</title>
+
+    @await RenderSectionAsync("Styles", required: false)
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    @* <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> *@
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/dropzone/min/dropzone.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="~/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+
+    <style>
+        a.logo.logo-light {
+            padding-top: 13px;
+        }
+
+        /* .actionbtns a {
+                                    min-width: 83px !important;
+                                    margin-bottom: 5px;
+                                } */
+    </style>
+    <style>
+        /* Ensure the table doesn't overflow */
+        #usersTable {
+            width: 100%;
+            table-layout: fixed; /* Fix column widths */
+        }
+
+            /* Ensure all cells wrap text */
+            #usersTable td, #usersTable th {
+                /* white-space: normal !important; */
+                word-wrap: break-word;
+                word-break: break-word;
+                /* max-width: 150px; */ /* Adjust max-width for columns with long text */
+            }
+
+        /* Allow horizontal scrolling if necessary */
+        .table-wrapper {
+            overflow-x: auto;
+            width: 100%;
+        }
+    </style>
+    <script>
+        var WebApiUrl = @Json.Serialize(@Configuration.GetSection("BaseURL").GetSection("WebApiURL").Value);
+        var PortalBaseUrl = @Json.Serialize(@Configuration.GetSection("BaseURL").GetSection("PortalBaseUrl").Value);
+    </script>
+</head>
+<body data-layout="horizontal" data-topbar="colored">
+    <div id="layout-wrapper">
+        <header id="page-topbar" style="background-image: url(/assets/images/hori-nav-bg.png)">
+            <div class="navbar-header">
+                <div class="d-flex">
+                    <div class="navbar-brand-box">
+                        <a href="#!" class="logo logo-light">
+                            <span class="logo-sm">
+                                <img src="~/assets/images/bahwan-logo.png" alt="">
+                                <img src="~/assets/images/bahwan-group-logo.png" alt="">
+                            </span>
+                            <span class="logo-lg">
+                                <img src="~/assets/images/bahwan-logo.png" alt="" style="height:70px;">
+                                <img src="~/assets/images/bahwan-group-logo.png" alt="" style="height:70px;">
+                            </span>
+                        </a>
+                    </div>
+
+                    <button type="button" class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light" data-toggle="collapse" data-target="#topnav-menu-content">
+                        <i class="fa fa-fw fa-bars"></i>
+                    </button>
+                </div>
+
+                <div class="d-flex">
+                    <div class="dropdown d-inline-block">
+                        <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img class="rounded-circle header-profile-user" src="~/assets/images/users/avatar-2.jpg"
+                                 alt="Header Avatar">
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#!"><i class="uil uil-user-circle font-size-16 align-middle text-muted mr-1"></i> <span class="align-middle" key="t-view"> View Profile</span></a>
+                            <a class="dropdown-item" href="@Url.Action("Logout","Home")"><i class="uil uil-sign-out-alt font-size-16 align-middle mr-1 text-muted"></i> <span class="align-middle" key="t-sign-out"> Sign out</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="topnav">
+                    <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+                        <div class="collapse navbar-collapse" id="topnav-menu-content">
+                            <ul class="navbar-nav">
+                                @await Component.InvokeAsync("Menu")
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    @{
+                        string displayAttr = "block";
+                        @if (string.IsNullOrEmpty(Convert.ToString(TempData["Message"])))
+                        {
+                            displayAttr = "none";
+                        }
+                        <div id="msg" style="display:@displayAttr">
+                            @Html.Raw(@TempData["Message"])
+                        </div>
+                    }
+                    @RenderBody()
+                </div>
+            </div>
+
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <script>document.write(new Date().getFullYear())</script> © BIPL Tenant Portal.
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="~/assets/libs/jquery/jquery.min.js"></script>
+    <script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/assets/libs/node-waves/waves.min.js"></script>
+    <script src="~/assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+    <script src="~/assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+    <script src="~/assets/libs/feather-icons/feather.min.js"></script>
+    @* <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> *@
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+    <script src="~/assets/libs/dropzone/min/dropzone.min.js"></script>
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+
+    <script src="~/assets/js/jquery.blockUI.js?v=@DateTime.UtcNow.Ticks"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script src="~/assets/js/pages/form-advanced.init.js"></script>
+    <script src="~/assets/js/app.js"></script>
+
+    @* <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            flatpickr("input[type='date']", {
+                dateFormat: "Y-m-d",  // Format: yyyy-mm-dd
+                allowInput: true,
+                enableTime: false,
+                altInput: true,        // Enables a prettier input
+                altFormat: "F j, Y",   // Example: March 8, 2025
+                defaultDate: null      // No default date
+            });
+        });
+    </script> *@
+
+</body>
+</html>

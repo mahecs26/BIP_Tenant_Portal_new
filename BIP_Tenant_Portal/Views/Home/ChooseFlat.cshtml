@@ -1,0 +1,141 @@
+﻿@{
+    ViewData["Title"] = "Choose Flat";
+    Layout = null;
+}﻿
+
+@using Newtonsoft.Json
+@using Microsoft.Extensions.Configuration
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+@inject IConfiguration Configuration
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Update Info | BIP Tenant Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <style>
+        #page-topbar {
+            position: relative;
+            left: 0;
+        }
+
+        header#page-topbar {
+            padding: 20px;
+        }
+
+        .auth-logo-left {
+            float: left;
+            margin-right: 10px;
+        }
+
+        .auth-logo-right {
+            float: right;
+            margin-right: 0px;
+        }
+
+        .login-top-header {
+            margin: 0 auto;
+        }
+    </style>
+    <script>
+        var WebApiUrl = @Json.Serialize(@Configuration.GetSection("BaseURL").GetSection("WebApiURL").Value);
+        var PortalBaseUrl = @Json.Serialize(@Configuration.GetSection("BaseURL").GetSection("PortalBaseUrl").Value);
+    </script>
+</head>
+<body class="authentication-bg" style="background-image: url(assets/images/auth-bg.png)">
+    <header id="page-topbar">
+        <div class="row">
+            <div class="login-top-header">
+                <div class="text-center">
+                    <a href="#!" class="d-block auth-logo auth-logo-left">
+                        <img src="~/assets/images/bahwan-logo.png" alt="" style="height:70px;" class="logo logo-dark">
+                    </a>
+                    <a href="#!" class="d-block auth-logo auth-logo-right">
+                        <img src="~/assets/images/bahwan-group-logo.png" alt="" style="height:70px;" class="logo logo-dark">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="account-pages mt-5 mb-4 pt-sm-5">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <h4 class="text-center mb-4">Select Your Unit Number</h4>
+
+                            <form id="chooseFlatForm" asp-action="ChooseUserFlat" asp-controller="Home">
+                                <div class="form-group">
+                                    <label for="flatSelect">Choose Unit Number</label>
+                                    <select class="form-control" id="flatSelect" name="flatId" required>
+                                        <option value="">-- Select --</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Continue</button>
+                            </form>
+
+                            <div class="text-center text-danger mt-2" id="errorMsg" style="display:none;">Please select a flat.</div>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <p>© <script>document.write(new Date().getFullYear())</script> BIP Tenant Portal</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/assets/libs/jquery/jquery.min.js"></script>
+    <script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/assets/libs/node-waves/waves.min.js"></script>
+    <script src="~/assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+    <script src="~/assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+    <script src="~/assets/libs/feather-icons/feather.min.js"></script>
+    <script src="~/assets/js/jquery.blockUI.js?v=@DateTime.UtcNow.Ticks"></script>
+
+    <script>
+        $(document).ready(function () {
+            var userId = "@ViewBag.UserID"; // Ensure ViewBag.UserId is set in controller
+
+            // Fetch flat list from API
+            $.ajax({
+                url: WebApiUrl +`/api/UserFlats/GetUserFlats/${userId}`,
+                method: 'GET',
+                success: function (data) {
+                    if (data && data.length > 0) {
+                        $.each(data, function (index, flat) {
+                            $('#flatSelect').append(`<option value="${flat.flatID}">${flat.flatNumber}</option>`);
+                        });
+                    } else {
+                        $('#errorMsg').text("No flats found for this user.").show();
+                    }
+                },
+                error: function () {
+                    $('#errorMsg').text("Failed to load flats. Please try again later.").show();
+                }
+            });
+
+            // Handle form submission
+            $('#chooseFlatForm').on('submit', function (e) {
+                e.preventDefault();
+                var selectedFlatId = $('#flatSelect').val();
+
+                if (!selectedFlatId) {
+                    $('#errorMsg').text("Please select a flat.").show();
+                } else {
+                    window.location.href = `/Home/ChooseUserFlat?flatId=${selectedFlatId}`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

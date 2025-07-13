@@ -1,0 +1,147 @@
+﻿@model ReportDateRangeViewModel
+
+@{
+    ViewData["Title"] = "Complaint Summary Report";
+}
+
+@section Styles {
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-select-bs4/css/select.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    @* <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> *@
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Complaint Summary Report</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Reports</a></li>
+                    <li class="breadcrumb-item active">Complaint Summary Report</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="DateRangeType">Select Date Range</label>
+                                <select id="DateRangeType" name="DateRangeType" class="form-control" asp-for="DateRangeType">
+                                    <option value="Daily">Daily</option>
+                                    <option value="Weekly">Weekly</option>
+                                    <option value="Monthly">Monthly</option>
+                                    <option value="Yearly">Yearly</option>
+                                    <option value="Custom">Custom</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2" id="CustomStartDateRange" style="display:none;">
+                            <div class="form-group">
+                                <label for="StartDate">Start Date</label>
+                                <input type="date" class="form-control" id="StartDate" name="StartDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-2" id="CustomEndDateRange" style="display:none;">
+                            <label for="EndDate">End Date</label>
+                            <input type="date" class="form-control" id="EndDate" name="EndDate" value="@Model.EndDate?.ToString("yyyy-MM-dd")" />
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="CategoryIDLbl">Service Category Type</label>
+                                <select id="CategoryIDDropdown" class="form-control">
+                                    <option value="0">ALL</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="StatusLbl">Status</label>
+                                <select id="StatusDropdown" class="form-control">
+                                    <option value="0">ALL</option>
+                                    <option value="InProgress">InProgress</option>
+                                    <option value="OnHold">OnHold</option>
+                                    <option value="Open">Open</option>
+                                    <option value="ReOpened">ReOpened</option>
+                                    <option value="Resolved">Resolved</option>
+                                    <option value="Scheduled">Scheduled</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <button id="btnRetreive" class="btn btn-primary" type="button">View Report</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-wrapper">
+                    <table id="usersTable" class="table dt-responsive nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Service RequestID</th>
+                                <th>Tenant Name</th>
+                                <th>Unit Number</th>
+                                <th>Property Name</th>
+                                <th>Category Type</th>
+                                <th>Raised On</th>
+                                <th>Status</th>
+                                <th>Hours</th>
+                                <th>StatusChangedOn</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/jszip/jszip.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    @* <script src="~/assets/libs/datatables.net-keyTable/js/dataTables.keyTable.min.html"></script> *@
+    <script src="~/assets/libs/datatables.net-select/js/dataTables.select.min.js"></script>
+
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    @* <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script> *@
+
+    <script src="~/assets/js/pages/datatables.init.js"></script>
+    <script src="~/assets/js/report-category-complaint-summary-report.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#usersTable').DataTable({
+                dom: 'Bfrtip', // Defines the placement of buttons
+                buttons: [
+                    'excelHtml5', // Excel Export
+                    'csvHtml5'   // CSV Export
+                ]
+            });
+        });
+    </script>
+}

@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Create Service Category";
+}
+@model BIP_Tenant_Portal.Models.ServiceCategory
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Create Service Category</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Properties Management</a></li>
+                    <li class="breadcrumb-item active">Create Service Category</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" class="needs-validation" novalidate>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="mainCategory">Main Category</label>
+                                <select class="form-control" id="mainCategory" name="MainCategoryID" required>
+                                    <option value="">-- Select Main Category --</option>
+                                    @foreach (var category in ViewBag.MainCategories as List<SelectListItem>)
+                                    {
+                                        <option value="@category.Value">@category.Text</option>
+                                    }
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a Main Category.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">&nbsp;</div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="subCategory">Sub Category</label>
+                                <input type="text" class="form-control" id="CategoryDescTxt" asp-for="CategoryDesc" placeholder="Sub Category" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please enter a Sub Category.
+                                </div>
+                            </div>
+                        </div>
+
+                        @* <div class="col-md-8">&nbsp;</div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="CategoryDescLbl">Category Description</label>
+                                <input type="text" class="form-control" id="CategoryDescTxt" asp-for="CategoryDesc" placeholder="Category Description">
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Category Description.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">&nbsp;</div> *@
+                    </div>
+                    <br />
+                    <button class="btn btn-primary" asp-action="Create" asp-controller="ServiceCategory" type="submit">Add Categroy</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/js/pages/form-validation.init.js"></script>
+    <script src="~/assets/js/service-category-create.js"></script>
+}

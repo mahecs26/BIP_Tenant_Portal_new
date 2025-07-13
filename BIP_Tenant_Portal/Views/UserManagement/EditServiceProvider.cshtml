@@ -1,0 +1,174 @@
+﻿@{
+    ViewData["Title"] = "Update User";
+}
+@model BIP_Tenant_Portal.Models.User
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Update User</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">User Management</a></li>
+                    <li class="breadcrumb-item active">Update User</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
+                    @Html.HiddenFor(m => m.UserID)
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="PropertyLbl">Building Name</label>
+                                <select id="PropertyDropdown" name="PropertySelectedIds" class="select2 form-control select2-multiple" data-placeholder="Select Property Name ..." multiple="multiple" required>
+                                    <option value="">--Select Building Name--</option>
+                                </select>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select Building name(s).
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="CategoryIDLbl">Service Category Type</label>
+                                <select id="CategoryIDDropdown" name="SelectedCategories" class="select2 form-control select2-multiple" data-placeholder="Select Service Category ..." multiple="multiple" required>
+                                    <option value="0">Select Service Category</option>
+                                </select>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select Service Category Type(s).
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="FullNameLbl">Service Provider Name</label>
+                                <input type="text" class="form-control" id="FullNameTxt" asp-for="FullName" placeholder="Enter Service Provider Name" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Service Provider Name.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="EmailLbl">Email ID</label>
+                                <input type="email" class="form-control" id="EmailTxt" asp-for="Email" placeholder="Enter Email ID" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Email ID.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="stateLbl">Mobile Number</label>
+                                <input type="text" class="form-control" id="MobileTxt" pattern="\d{8}" asp-for="Mobile" maxlength="8" placeholder="Enter Mobile Number" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Mobile Number.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="conStartDateLbl">Contract start date</label>
+                                <input type="date" asp-for="ConStartDate" class="form-control" id="conStartDate">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="conEndDateLbl">Contract end date</label>
+                                <input type="date" asp-for="ConEndDate" class="form-control" id="conEndDate">
+                            </div>
+                        </div>
+                        <div class="col-md-6" id="CRfileAttachedLabelDiv">
+                            <div class="form-group">
+                                <p>Upload the CR Copy as PDF file.</p>
+                                <input id="CRfileAttached" name="CRfileAttached" type="file" multiple="multiple" class="form-control" accept=".pdf">
+                                @Html.HiddenFor(m => m.CRCardPath)
+                            </div>
+                        </div>
+                        <div class="col-md-6" id="VATfileAttachedLabelDiv">
+                            <div class="form-group">
+                                <p>Upload VAT Certificate as PDF file.</p>
+                                <input id="VATfileAttached" name="VATfileAttached" type="file" multiple="multiple" class="form-control" accept=".pdf">
+                                @Html.HiddenFor(m => m.VATCertificatePath)
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="UserDescriptionLbl">Description</label>
+                                <textarea class="form-control" id="UserDescriptionTxt" asp-for="UserDescription" placeholder="Enter Description (Optional)"></textarea>
+                            </div>
+                        </div>
+                        @Html.HiddenFor(m => m.PasswordHash)
+                        @Html.HiddenFor(m => m.UserType)
+                    </div>
+                    <br />
+                    <button class="btn btn-primary" id="idbtnTechUserCreate" asp-action="UpdateServiceProvider" asp-controller="UserManagement" type="submit">Update User</button>
+                    &nbsp;
+                    <button class="btn btn-danger" type="button" asp-action="TechnicianList" asp-controller="UserManagement">Go Back</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="passwordModalLabel">Generated Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="UserDescriptionLbl">Password</label>
+                        <input type="text" class="form-control font-weight-bold" id="generatedPassword">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="userPassword">User Password</button>
+                <button class="btn btn-secondary" id="refreshPassword">Refresh</button>
+                <button class="btn btn-success" id="copyPassword">Copy</button>
+                <button class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/js/pages/form-validation.init.js"></script>
+    <script src="~/assets/js/user-management-common.js?v=@DateTime.UtcNow.Ticks"></script>
+    <script src="~/assets/js/tech-user-edit.js?v=@DateTime.UtcNow.Ticks"></script>
+}

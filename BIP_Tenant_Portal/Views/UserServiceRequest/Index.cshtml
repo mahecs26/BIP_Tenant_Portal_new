@@ -1,0 +1,208 @@
+﻿@{
+    ViewData["Title"] = "Create Service Request";
+}
+
+@model BIP_Tenant_Portal.Models.TenantQuery
+@{
+    // var previousServiceRequestNumber = _context.HttpContext?.Session.GetString("ServiceRequestNumber") ?? "Empty";
+    var previousServiceRequestNumber = Convert.ToString(TempData["ServiceRequestNumber"]) ?? "Empty";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Create Service Request</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Service Management</a></li>
+                    <li class="breadcrumb-item active">Create Service Request</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <form method="post" class="needs-validation" novalidate>
+            <div class="card mb-1 shadow-none">
+                <div class="card-body row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="propertyDropdownLbl">Building Name</label>
+                            <input type="text" class="form-control" id="BuildingName" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="BuildingCodeDropdownLbl">Building Code</label>
+                            <input type="text" class="form-control" id="BuildingCode" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="flatNameLbl">Unit Number</label>
+                            <input type="text" class="form-control" id="FlatNumber" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="accordion" class="custom-accordion">
+                <!-- Initial category -->
+                <div class="card mb-1 shadow-none">
+                    <a href="#collapseOne" class="text-dark" data-toggle="collapse" aria-expanded="true" aria-controls="collapseOne">
+                        <div class="card-header" id="headingOne">
+                            <h6 class="m-0">
+                                Service Request #1
+                                <i class="mdi mdi-chevron-up float-right accor-down-icon"></i>
+                            </h6>
+                        </div>
+                    </a>
+
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body row">
+                            <div class="col-md-3 mb-3">
+                                <label for="serviceCategory1" class="form-label mainCategory">Service Category</label>
+                                <select class="form-control" id="serviceCategory1" onchange="loadSubCategories(this)" required>
+                                    <option selected>Choose...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="subCategory">Sub Category</label>
+                                <select class="form-control subCategory" id="subCategory1" name="SubCategoryID1" required>
+                                    <option value="">-- Select Sub Category --</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a Sub Category.
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="visitTime1" class="form-label">Prefered Visit Date</label>
+                                <input type="text" class="form-control datetime-restrict" placeholder="'yyy-mm-dd" id="preferedVisitTime1">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="visitTime1" class="form-label">Prefered Visit Time</label>
+                                <select id="time1" class="form-control timedropdwon">
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="communicationMethod1" class="form-label">Communication Method</label>
+                                <select class="form-control" id="communicationMethod1">
+                                    <option selected>Choose...</option>
+                                    <option>Phone</option>
+                                    <option>Email</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="upload1" class="form-label">Upload Photos</label>
+                                <input type="file" class="form-control" id="upload1" accept=".jpg, .png, .jpeg">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="description1" class="form-label">Description</label>
+                                <textarea class="form-control" id="description1" rows="3"></textarea>
+                            </div>
+                            @Html.Hidden("hiddenPreviousServiceRequestNumber", previousServiceRequestNumber);
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-1 shadow-none">
+                <div class="card-body row">
+                    <div class="col-md-4">
+                        @*  <button class="btn btn-primary" asp-action="Create" asp-controller="UserServiceRequest" type="submit">Submit Request</button> *@
+                        <button class="btn btn-primary" id="submitForm" type="button">Submit Request</button>
+                        &nbsp;
+                        <button class="btn btn-secondary" id="addCategory" type="button">Add More Service Request</button>
+                    </div>
+                </div>
+            </div>
+
+            @* <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="CategoryIDLbl">Service Category Type</label>
+                                <select id="CategoryIDDropdown" asp-for="CategoryID" class="select2 form-control select2-multiple" data-placeholder="Select Service Category ..." multiple="multiple">
+                                    <option value="0">Select Service Category</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="UserDescriptionLbl">Prefered Visit Time</label>
+                                <input type="datetime-local" class="form-control" id="UserDescriptionTxt" asp-for="PreferedVisitTime" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Prefered Visit Time.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="CommunicationMethodLbl">Communication Method</label>
+                                <select id="CommunicationMethodDropdown" asp-for="CommunicationMethod" class="form-control">
+                                    <option value="Phone">Phone</option>
+                                    <option value="Email">Email</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="UserDescriptionLbl">Upload photos/videos</label>
+                                <input name="file" type="file" class="form-control" multiple="multiple">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="UserDescriptionLbl">Description</label>
+                                <textarea class="form-control" id="UserDescriptionTxt" asp-for="Description" placeholder="Write the query here" required></textarea>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Description.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br /> *@
+
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="requestSuccessModal" tabindex="-1" role="dialog" aria-labelledby="requestSuccessLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="requestSuccessLabel">Service Request</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12" style="text-align: center;">
+                    <div class="form-group">
+                        <p style="font-size: large;">Service request created successfully.</p>
+                        <p style="font-size: medium;">SERVICE REQUEST NUMBER:<p style="font-size:large; font-weight:600; color:red"> @previousServiceRequestNumber </p></p>
+                        <img src="~/assets/images/verified.gif" style="width: 40%;" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/js/pages/form-validation.init.js"></script>
+    <script src="~/assets/js/user-service-request.js?v=@DateTime.UtcNow.Ticks"></script>
+    <script>
+        var TenantId = "@ViewBag.UserID";
+        var FlatID = "@ViewBag.FlatID";
+    </script>
+}

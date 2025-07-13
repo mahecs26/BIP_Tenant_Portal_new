@@ -1,0 +1,266 @@
+﻿@{
+    ViewData["Title"] = "Create Tenant";
+}
+@model BIP_Tenant_Portal.Models.User
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Create Tenant</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">User Management</a></li>
+                    <li class="breadcrumb-item active">Create Tenant</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" class="needs-validation" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="PropertyLbl">Building Name * </label>
+                                <select id="PropertyDropdown" asp-for="PropertyID" class="form-control" required>
+                                    <option value="">--Select Building Name--</option>
+                                </select>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select Building name.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="BuildingCodeIDLbl">Building Code * </label>
+                                <select id="BuildingCodeIDDropdown" asp-for="BuildingCodeID" class="form-control" required>
+                                    <option value="">--Select Building Code--</option>
+                                </select>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select Building Code.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="flatIDLbl">Unit Number * </label>
+                                <label class="badge badge-primary" style="display:none;float:right;" id="spanPropertyType"></label>
+                                <select id="flatIDDropdown" asp-for="FlatID" name="SelectedFlats" class="form-control select2 select2-multiple" data-placeholder="Select Unit Number ..." multiple="multiple" required>
+                                    <option value="">--Select Unit Number--</option>
+                                </select>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select Unit Number.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="FullNameLbl">Tenant Name * </label>
+                                <input type="text" class="form-control" id="FullNameTxt" asp-for="FullName" placeholder="Enter Full Name" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Full Name.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="TenancyStartDateLbl">Tenancy Start Date * </label>
+                                <input type="date" class="form-control" id="TenancyStartDateTxt" asp-for="TenancyStartDate" placeholder="Select Tenancy Start Date" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select Tenancy Start Date.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="TenancyEndDateLbl">Tenancy End Date * </label>
+                                <input type="date" class="form-control" id="TenancyEndDateTxt" asp-for="TenancyEndDate" placeholder="Select Tenancy End Date" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select Tenancy End Date.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="MunicipalityAgreementNumberLbl">Municipality Agreement Number * </label>
+                                <input type="text" class="form-control" id="MunicipalityAgreementNumberTxt" asp-for="MunicipalityAgreementNumber" placeholder="Enter Municipality Agreement Number" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please Enter Municipality Agreement Number.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="TenancyStartDateLbl">Agreement Copy * </label>
+                                <input id="AgreementCopy" name="AgreementCopy" type="file" multiple="multiple" class="form-control" accept=".pdf" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please Upload Agreement Copy.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="VATfileAttachedLabelDiv" style="display:none;">
+                            <div class="form-group">
+                                <p style="color:red">Upload VAT Certificate as PDF file.</p>
+                                <input id="VATfileAttached" name="VATfileAttached" type="file" multiple="multiple" class="form-control" accept=".pdf">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="LeaseTypeLbl">Lease Type</label>
+                                <select id="LeaseType" class="form-control">
+                                    <option value="Personal">Personal</option>
+                                    <option value="Company">Company</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="idCardLabelDiv" style="display:none;">
+                            <div class="form-group">
+                                <label id="idCardLabel">Civil ID Number * </label>
+                                <input type="text" class="form-control" asp-for="IdCardNumber" id="idCardText" maxlength="35" placeholder="ID Number" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="idExpiryDateLabelDiv" style="display:none;">
+                            <div class="form-group">
+                                <label id="idExpiryDateLabel">Civil ID Expiry Date * </label>
+                                <input type="date" class="form-control" asp-for="IdExpiryDate" id="idExpiryDateText" placeholder="Expiry Date" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="idCardfileAttachedLabelDiv" style="display:none;">
+                            <div class="form-group">
+                                <p style="color:red">* Upload the ID both front and back image as PDF file.</p>
+                                <input id="idCardfileAttached" name="idCardfileAttached" type="file" multiple="multiple" class="form-control" required accept=".pdf">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="OccupantsLbl">Occupants</label>
+                                <input type="text" class="form-control" id="OccupantsTxt" asp-for="Occupants" placeholder="Enter Occupants">
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="CRNumberLabelDiv" style="display:none;">
+                            <div class="form-group">
+                                <label id="CRNumberLabel">CR Number</label>
+                                <input type="text" class="form-control" asp-for="CRNumber" id="CRNumberText" placeholder="CR Number" maxlength="35">
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="CRExpiryDateLabelDiv" style="display:none;">
+                            <div class="form-group">
+                                <label id="CRExpiryDateLabel">CR Expiry Date</label>
+                                <input type="date" class="form-control" asp-for="CRExpiryDate" id="CRExpiryDateText" placeholder="CR Expiry Date">
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="CRfileAttachedLabelDiv" style="display:none;">
+                            <div class="form-group">
+                                <p style="color:red">* Upload the CR Copy as PDF file.</p>
+                                <input id="CRfileAttached" name="CRfileAttached" type="file" multiple="multiple" class="form-control" accept=".pdf">
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="employeeIdDiv" style="display:none;">
+                            <div class="form-group">
+                                <label for="EmployeeIdLbl">EmployeeId</label>
+                                <input type="text" class="form-control" id="EmployeeIdTxt" asp-for="EmployeeId" placeholder="Enter EmployeeId">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="EmailLbl">Email ID</label>
+                                <input type="email" class="form-control" id="EmailTxt" asp-for="Email" placeholder="Enter Email ID">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="stateLbl">Mobile Number</label>
+                                <input type="text" class="form-control" id="MobileTxt" pattern="\d{8}" asp-for="Mobile" maxlength="8" placeholder="Enter Mobile Number">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="UserDescriptionLbl">Description</label>
+                                <textarea class="form-control" id="UserDescriptionTxt" asp-for="UserDescription" placeholder="Enter Description (Optional)"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="PasswordHashLbl">Password * </label>
+                                <input type="text" class="form-control" id="PasswordHashTxt" asp-for="PasswordHash" maxlength="8" placeholder="Enter Password" required>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <button class="btn btn-primary" id="AddUser" asp-action="Create" asp-controller="UserManagement" type="submit">Add User</button>
+                    @* &nbsp;
+                    <button class="btn btn-secondary" type="button" id="btnGeneratePassword">Generate Password</button> *@
+                    &nbsp;
+                    <button class="btn btn-danger" type="reset" id="btnReset">Reset</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="passwordModalLabel">Generated Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="UserDescriptionLbl">Password</label>
+                        <input type="text" class="form-control font-weight-bold" id="generatedPassword">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="userPassword">User Password</button>
+                <button class="btn btn-secondary" id="refreshPassword">Refresh</button>
+                <button class="btn btn-success" id="copyPassword">Copy</button>
+                <button class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/js/pages/form-validation.init.js"></script>
+    <script src="~/assets/js/user-management.js?v=@DateTime.UtcNow.Ticks"></script>
+    <script src="~/assets/js/user-management-common.js?v=@DateTime.UtcNow.Ticks"></script>
+    <script src="~/assets/js/user-upload-support-document.js"></script>
+}

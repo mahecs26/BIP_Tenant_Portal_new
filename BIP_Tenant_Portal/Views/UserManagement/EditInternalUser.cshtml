@@ -1,0 +1,113 @@
+﻿@{
+    ViewData["Title"] = "Update Internal User";
+}
+@model BIP_Tenant_Portal.Models.User
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/skins/all.css">
+}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Update Internal User</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">User Management</a></li>
+                    <li class="breadcrumb-item active">Update Internal User</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" class="needs-validation" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="UserID" id="UserID" name="UserID" />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="PropertyLbl">Building Name</label>
+                                <select id="PropertyDropdown" name="PropertySelectedIds" class="select2 form-control select2-multiple" data-placeholder="Select Property Name ..." multiple="multiple" required>
+                                    <option value="">--Select Building Name--</option>
+                                </select>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select Building name(s).
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="FullNameLbl">Name</label>
+                                <input type="text" class="form-control" id="FullNameTxt" asp-for="FullName" placeholder="Enter Full Name">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="EmailLbl">Email ID *</label>
+                                <input type="email" class="form-control" id="EmailTxt" asp-for="Email" placeholder="Enter Email ID" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid email
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="stateLbl">Mobile Number</label>
+                                <input type="text" class="form-control" id="MobileTxt" pattern="\d{8}" asp-for="Mobile" maxlength="8" placeholder="Enter Mobile Number">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="role">Role</label>
+                                <select class="form-control" id="role" name="RoleId" asp-for="UserType" required>
+                                    <option value="">Select Role</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Approver">Approver</option>
+                                </select>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select role
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="PasswordHashLbl">Password * </label>
+                                <input type="text" class="form-control" id="PasswordHashTxt" asp-for="PasswordHash" maxlength="8" placeholder="Enter Password" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Permissions</label>
+                                <ul id="permissionsTree" class="treeview"></ul>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+                    <button class="btn btn-primary" type="button" id="saveUserBtn">Update User</button>
+                    &nbsp;
+                    <button class="btn btn-danger" type="reset" id="btnReset">Reset</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/js/pages/form-validation.init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
+    <script src="~/assets/js/user-management-internal-user-edit.js?v=@DateTime.UtcNow.Ticks"></script>
+}

@@ -1,0 +1,33 @@
+﻿@model List<PagesModel>
+
+@foreach (var parent in Model.Where(m => m.ParentMenuId == null).OrderBy(m => m.MenuOrder))
+{
+    var childMenus = Model.Where(m => m.ParentMenuId == parent.Id).OrderBy(m => m.MenuOrder).ToList();
+    if (childMenus.Any())
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle arrow-none" href="#!" id="topnav-@parent.ControllerName" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="@parent.IconClass nav-icon"></i>
+                <span>@parent.PageName</span> <div class="arrow-down"></div>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="topnav-@parent.ControllerName">
+                @foreach (var child in childMenus)
+                {
+                    <a href="@Url.Action(child.ActionName, child.ControllerName)" class="dropdown-item">
+                        <i class="@child.IconClass"></i> @child.PageName
+                    </a>
+                }
+            </div>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action(parent.ActionName, parent.ControllerName)">
+                <i class="@parent.IconClass nav-icon"></i>
+                <span>@parent.PageName</span>
+            </a>
+        </li>
+    }
+}

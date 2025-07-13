@@ -1,0 +1,157 @@
+﻿@{
+    ViewData["Title"] = "Service Provider Details";
+}
+@model BIP_Tenant_Portal.Models.User
+@{
+    string pathPrefix = "/uploads";
+}
+<style>
+    .pdf-embed {
+        width: 100%; /* Full width of the container */
+        height: 600px; /* Set desired height */
+    }
+
+</style>
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Service Provider Details</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">User Management</a></li>
+                    <li class="breadcrumb-item active">Service Provider Details</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Personal Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>User ID:</strong> @Model.UserID</p>
+                        <p><strong>Full Name:</strong> @Model.FullName</p>
+                        <p><strong>Email:</strong> @Model.Email</p>
+                        <p><strong>Mobile:</strong> @Model.Mobile</p>
+
+                        <p>
+                            <strong>User Status:</strong>
+                            @if (Model.UserStatus == "Active")
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Inactive</span>
+                            }
+                        </p>
+
+                        <p><strong>User Description:</strong> @Model.UserDescription</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Login ID:</strong> @Model.LoginId</p>
+                        <p><strong>Service Category Type(s):</strong> <div id="categoryBadgeContainer"></div></p>
+                        <p><strong>Building Name(s):</strong> <div id="propertyBadgeContainer"></div></p>
+                        <input type="hidden" asp-for="UserID" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 w-100">
+            <div class="card-header">
+                <h5>Identification Documents</h5>
+            </div>
+            <div class="card-body">
+
+                @if (!string.IsNullOrEmpty(Model.CRCardPath))
+                {
+                    <p><strong>CR Card Path:</strong> <a href="@($"{pathPrefix}{Model.CRCardPath}")" target="_blank">View CR Card</a></p>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.VATCertificatePath))
+                {
+                    <p><strong>VAT Certificate Path:</strong> <a href="@($"{pathPrefix}{Model.VATCertificatePath}")" target="_blank">View VAT Certificate</a></p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 w-100">
+            <div class="card-header">
+                <h5>Contract Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Contract Start Date:</strong> @Model.ConStartDate</p>
+                <p><strong>Contract End Date:</strong> @Model.ConEndDate</p>
+               
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 w-100">
+            <div class="card-header">
+                <h5>Approval Information</h5>
+            </div>
+            <div class="card-body">
+                <p>
+                    <strong>Approval Status:</strong>
+                    @if (Model.ApprovalStatus == "Approved")
+                    {
+                        <span class="badge bg-success">Approved</span>
+                    }
+                    else if (Model.ApprovalStatus == "Pending")
+                    {
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    }
+                    else if (Model.ApprovalStatus == "Rejected")
+                    {
+                        <span class="badge bg-danger">Rejected</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">@Model.ApprovalStatus</span> <!-- Fallback case -->
+                    }
+                </p>
+
+                <p><strong>Approved By:</strong> @Model.ApprovedBy</p>
+                <p><strong>Approval Date:</strong> @Model.ApprovalDate</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 w-100">
+            <div class="card-header">
+                <h5>Metadata Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Created On:</strong> @Model.CreatedOn</p>
+                <p><strong>Created By:</strong> @Model.CreatedBy</p>
+                <p><strong>Modified On:</strong> @Model.ModifiedOn</p>
+                <p><strong>Modified By:</strong> @Model.ModifiedBy</p>
+                <p><strong>Last Login:</strong> @Model.LastLogin</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/js/pages/form-validation.init.js"></script>
+
+    <script src="~/assets/js/service-provider-details-view.js"></script>
+}

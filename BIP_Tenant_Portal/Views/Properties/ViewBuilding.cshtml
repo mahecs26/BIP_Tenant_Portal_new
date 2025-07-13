@@ -1,0 +1,106 @@
+﻿@model BIP_Tenant_Portal.Models.Property
+
+@{
+    ViewData["Title"] = "Building Details";
+}
+@{
+    string pathPrefix = "/uploads/";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Building Details</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Building Management</a></li>
+                    <li class="breadcrumb-item active">Building Details</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Building Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Building Name:</strong> @Model.PropertyName</p>
+                        <p><strong>Building Code(s):</strong> <div id="propertyBadgeContainer"></div></p>
+                        <p><strong>City:</strong> @Model.City</p>
+                        <p><strong>Manager In Charge:</strong> @Model.ManagerInCharge</p>
+                        <p><strong>Building Owner:</strong> @Model.BuildingOwner</p>
+                        <p><strong>Address:</strong> @Model.Address</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Building Photo:</strong></p>
+                        @if (!string.IsNullOrEmpty(Model.PhotoUploadLocation))
+                        {
+                            <img src="@($"{pathPrefix}{Model.PhotoUploadLocation}")" class="img-fluid rounded" alt="Building Photo" style="max-width: 300px;">
+                        }
+                        <input type="hidden" asp-for="PropertyID" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Civil Defence Certificates</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Certificate</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Download</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 1; i <= 4; i++)
+                            {
+                                var pdfPath = Model.GetType().GetProperty($"CivilDefenceCertificate{i}_PDFPath")?.GetValue(Model, null);
+                                var startDate = Model.GetType().GetProperty($"CivilDefenceCertificate{i}_StartDate")?.GetValue(Model, null);
+                                var endDate = Model.GetType().GetProperty($"CivilDefenceCertificate{i}_EndDate")?.GetValue(Model, null);
+
+                                <tr>
+                                    <td>Civil Defence Certificate @i</td>
+                                    <td>@startDate</td>
+                                    <td>@endDate</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(pdfPath?.ToString()))
+                                        {
+                                            <a href="@($"{pathPrefix}{pdfPath}")" target="_blank" class="btn btn-sm btn-primary">View PDF</a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">N/A</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/js/pages/form-validation.init.js"></script>
+
+    <script src="~/assets/js/building-details-view.js"></script>
+}

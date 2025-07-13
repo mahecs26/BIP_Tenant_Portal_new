@@ -1,0 +1,171 @@
+﻿@{
+    ViewData["Title"] = "Common Area Service Request";
+}
+@model BIP_Tenant_Portal.Models.TenantQuery
+@inject IHttpContextAccessor _context;
+@{
+    // var previousServiceRequestNumber = _context.HttpContext?.Session.GetString("ServiceRequestNumber") ?? "Empty";
+    var previousServiceRequestNumber = Convert.ToString(TempData["ServiceRequestNumber"]) ?? "Empty";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Common Area Service Request</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Service Management</a></li>
+                    <li class="breadcrumb-item active">Common Area Service Request</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" class="needs-validation" novalidate>
+
+                    <input asp-for="FlatID" type="hidden" />
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="PropertyLbl">Building Name</label>
+                                <select id="PropertyDropdown" class="form-control">
+                                    <option value="">--Select Building Name--</option>
+                                </select>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select Building name.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="mainCategory">Main Category</label>
+                                <select class="form-control" id="mainCategory" name="MainCategoryID" required>
+                                    <option value="">-- Select Main Category --</option>
+                                    @foreach (var category in ViewBag.MainCategories as List<SelectListItem>)
+                                    {
+                                        <option value="@category.Value">@category.Text</option>
+                                    }
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a Main Category.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="subCategory">Sub Category</label>
+                                <select class="form-control" id="subCategory" name="SubCategoryID" required>
+                                    <option value="">-- Select Sub Category --</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a Sub Category.
+                                </div>
+                            </div>
+                        </div>
+                   
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="UserDescriptionLbl">Prefered Visit Date</label>
+                                <input type="text" class="form-control datetime-restrict" placeholder="'yyy-mm-dd" id="preferedVisitTime" asp-for="PreferedVisitDate" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Prefered Visit Time.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="UserDescriptionLbl">Prefered Visit Time</label>
+                                <select id="time" class="form-control timedropdwon" asp-for="PreferedVisitTimeValue">
+                                </select>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-4 ">
+                            <div class="form-group">
+                                <label for="CommunicationMethodLbl">Communication Method</label>
+                                <select id="CommunicationMethodDropdown" asp-for="CommunicationMethod" class="form-control">
+                                    <option value="Phone">Phone</option>
+                                    <option value="Email">Email</option>
+                                </select>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-4 ">
+                            <div class="form-group">
+                                <label for="UserDescriptionLbl">Upload photos</label>
+                                <input name="file" type="file" class="form-control" multiple="multiple" accept="image/*">
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-4 ">
+                            <div class="form-group">
+                                <label for="UserDescriptionLbl">Description</label>
+                                <textarea class="form-control" id="UserDescriptionTxt" asp-for="Description" placeholder="Provide details about the required service or complaint" required></textarea>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Description.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @Html.Hidden("hiddenPreviousServiceRequestNumber", previousServiceRequestNumber);
+                    <br />
+                    <button class="btn btn-primary" id="btnCreate" asp-action="Create" asp-controller="ServiceRequest" type="submit">Send Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="requestSuccessModal" tabindex="-1" role="dialog" aria-labelledby="requestSuccessLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="requestSuccessLabel">Service Request</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12" style="text-align: center;">
+                    <div class="form-group">
+                        <p style="font-size: large;">Service request created successfully.</p>
+                        <p style="font-size: medium;">SERVICE REQUEST NUMBER:<p style="font-size:large; font-weight:600; color:red"> @previousServiceRequestNumber </p></p>
+                        <img src="~/assets/images/verified.gif" style="width: 40%;" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/js/pages/form-validation.init.js"></script>
+    <script src="~/assets/js/service-request.js?v=@DateTime.UtcNow.Ticks"></script>
+
+    <script>
+        var UserID = "@ViewBag.UserID";
+    </script>
+}

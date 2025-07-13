@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "Assign Request";
+}
+@model BIP_Tenant_Portal.Models.TenantQueryInDetails
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Assign Request</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Service Management</a></li>
+                    <li class="breadcrumb-item active">Assign Request</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" class="needs-validation" novalidate>
+                    <div class="row">
+
+                        <div class="col-md-6" hidden>
+                            <div class="form-group">
+                                <label for="QueryIDLbl">Query ID</label>
+                                <input type="text" class="form-control" id="QueryIDTxt" asp-for="QueryID" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="QueryIDLbl">Service Request ID</label>
+                                <input type="text" class="form-control" id="QueryIDTxt" asp-for="ServiceRequestNumber" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="TenantNameLbl">Tenant Name</label>
+                                <input type="text" class="form-control" id="TenantNameTxt" asp-for="TenantName" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="FlatNumberLbl">Unit Number</label>
+                                <input type="text" class="form-control" id="FlatNumberTxt" asp-for="FlatNumber" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="PropertyNameLbl">Building Name</label>
+                                <input type="text" class="form-control" id="PropertyNameTxt" asp-for="PropertyName" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="CategoryTypeLbl">Category Type</label>
+                                <input type="text" class="form-control" id="CategoryTypeTxt" asp-for="CategoryType" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="UserDescriptionLbl">Description</label>
+                                <textarea class="form-control" id="UserDescriptionTxt" asp-for="Description" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="ResourceIDLbl">Service Provider <span style="color:red;">*</span></label>
+                                <select id="ResourceIDDropdown" asp-for="ResourceID" class="form-control">
+                                    <option value="">Select Service Provider</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <button class="btn btn-primary" asp-action="Submit" asp-controller="QueryAssignment" type="submit">Assign</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/js/pages/form-validation.init.js"></script>
+    <script src="~/assets/js/query-assign-edit.js?v=@DateTime.UtcNow.Ticks"></script>
+}

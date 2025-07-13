@@ -1,0 +1,152 @@
+﻿@{
+    ViewData["Title"] = "Service Request List";
+}
+
+@section Styles {
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-select-bs4/css/select.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    @* <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> *@
+}
+@model BIP_Tenant_Portal.Models.TenantQuery
+@{
+    // var previousServiceRequestNumber = _context.HttpContext?.Session.GetString("ServiceRequestNumber") ?? "Empty";
+    var previousServiceRequestNumber = Convert.ToString(TempData["ServiceRequestNumber"]) ?? "Empty";
+    var ServiceProviderName = Convert.ToString(TempData["ServiceProviderName"]) ?? "";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Service Request List</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Service Management</a></li>
+                    <li class="breadcrumb-item active">Service Request List</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<form method="post" class="needs-validation" asp-action="ChangeStatus" asp-controller="UserServiceRequest" novalidate>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <input type="hidden" name="QueryID" id="QueryID">
+                    <input type="hidden" name="Operation" id="Operation">
+                    <div class="table-wrapper">
+                        <table id="usersTable" class="table dt-responsive nowrap w-100">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Service RequestID</th>
+                                    <th>Category Type</th>
+                                    <th>Raised On</th>
+                                    <th>Status</th>
+                                    <th>Status Changed On</th>
+                                    <th>Hours</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="8" style="text-align:center;">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    @Html.Hidden("hiddenPreviousServiceRequestNumber", previousServiceRequestNumber);
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="acceptConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="acceptConfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="acceptConfirmationModalLabel">Confirm Accept</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to accept this item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="confirmAcceptBtn" class="btn btn-danger">Accept</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="reopenConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="reopenConfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reopenConfirmationModalLabel">Confirm Reopen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to reopen this item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="confirmReopenBtn" class="btn btn-danger">Reopen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="modal fade" id="requestSuccessModal" tabindex="-1" role="dialog" aria-labelledby="requestSuccessLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="requestSuccessLabel">Service Request</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12" style="text-align: center;">
+                    <div class="form-group">
+                        <p style="font-size: large;">Service request created successfully.</p>
+                        <p style="font-size: medium;">SERVICE REQUEST NUMBER:<p style="font-size:large; font-weight:600; color:red">@Html.Raw(previousServiceRequestNumber)</p>
+                        <p style="font-size: medium;">Service Provider Name:<p style="font-size:large; font-weight:600; color:red">@Html.Raw(ServiceProviderName)</p>
+                        <img src="~/assets/images/verified.gif" style="width: 40%;" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/jszip/jszip.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    @* <script src="~/assets/libs/datatables.net-keyTable/js/dataTables.keyTable.min.html"></script> *@
+    <script src="~/assets/libs/datatables.net-select/js/dataTables.select.min.js"></script>
+
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    @* <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script> *@
+
+    <script src="~/assets/js/pages/datatables.init.js"></script>
+    <script>
+        var TenantId = "@ViewBag.UserID";
+    </script>
+    <script src="~/assets/js/user-service-request-list.js?v=@DateTime.UtcNow.Ticks"></script>
+
+}

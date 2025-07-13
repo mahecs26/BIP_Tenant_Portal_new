@@ -1,0 +1,129 @@
+﻿@{
+    ViewData["Title"] = "Assign Request";
+}
+@model BIP_Tenant_Portal.Models.QueryAssignmentModel
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Update Assignment</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Service Management</a></li>
+                    <li class="breadcrumb-item active">Update Assignment</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-6" hidden>
+                            <div class="form-group">
+                                <label for="AssignmentLbl">Assignment ID</label>
+                                <input type="text" class="form-control" id="AssignmentTxt" asp-for="QueryAssignmentDetails.AssignmentID" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6" hidden>
+                            <div class="form-group">
+                                <label for="QueryIDLbl">Query ID</label>
+                                <input type="text" class="form-control" id="QueryIDTxt" asp-for="QueryAssignmentDetails.QueryID" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6" hidden>
+                            <div class="form-group">
+                                <label for="AssignedByLbl">Assigned By</label>
+                                <input type="text" class="form-control" id="AssignedByTxt" asp-for="QueryAssignmentDetails.AssignedBy" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="ResourceLbl">Service RequestID</label>
+                                <input type="text" class="form-control" id="ServiceRequestTxt" asp-for="ServiceRequestNumber" readonly>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="UserDescriptionLbl">Description</label>
+                                <textarea class="form-control" id="UserDescriptionTxt" asp-for="QueryAssignmentDetails.Description" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="StatusLbl">Status<span style="color:red;">*</span></label>
+                                <select id="StatusDropdown" asp-for="QueryAssignmentDetails.Status" class="form-control">
+                                    <option value="Resolved">Resolved</option>
+                                    <option value="Unresolved">Unresolved</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="ResourceLbl">Resource ID</label>
+                                <select id="resourseID" asp-for="QueryAssignmentDetails.ResourceID" asp-items="ViewBag.ResourseList" class="form-control">
+                                    <option value="">--Select Unit Number--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="ResourceLbl">Comments</label>
+                                <input type="text" class="form-control" id="ReasonTxt" asp-for="Comments">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="photosLbl">Upload Photos</label>
+                                <input type="file" class="form-control" id="photos">
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <button class="btn btn-primary" id="UpdateSave" asp-action="UpdateSave" asp-controller="QueryAssignment" type="submit">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/js/pages/form-validation.init.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            nonReAssign();
+
+             $('#StatusDropdown').change(function() {
+
+                var statusDropdown =$('#StatusDropdown').val();
+                if(statusDropdown === "ReAssigned")
+                {
+                    doReAssign();
+                }
+                else{
+                    nonReAssign();
+                }
+            });
+
+            function nonReAssign()
+            {
+                 $('#resourseID').css('pointer-events', 'none');
+                    $('#ReasonTxt').prop('required', false);
+            }
+            function doReAssign()
+            {
+                $('#resourseID').css('pointer-events', 'auto');
+                      $('#ReasonTxt').prop('required', true);
+            }
+        });
+    </script>
+}

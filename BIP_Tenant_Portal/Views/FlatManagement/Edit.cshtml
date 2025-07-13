@@ -1,0 +1,113 @@
+﻿@{
+    ViewData["Title"] = "Update Property";
+}
+@model BIP_Tenant_Portal.Models.Flat
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Update Property</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Property Management</a></li>
+                    <li class="breadcrumb-item active">Update Property</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" class="needs-validation" novalidate>
+                    <input type="hidden" asp-for="FlatID">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="propertyDropdownLbl">Building Name</label>
+                                <select id="propertyDropdown" class="form-control" asp-for="PropertyID" asp-items="ViewBag.PropertyList" required>
+                                    <option value="">--Select Building Name--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="BuildingCodeDropdownLbl">Building Code</label>
+                                <select id="BuildingCodeDropdown" asp-for="BuildingCodeID" asp-items="ViewBag.PropertyBuildingCodeList" class="form-control" required>
+                                    <option value="">--Select Building Code--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="flatNameLbl">Unit Number</label>
+                                <input type="text" class="form-control" id="flatNameTxt" asp-for="FlatNumber" placeholder="Enter Unit Number" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Flat Name.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="FlatTypeLbl">Flat Type</label>
+                                <select id="FlatTypeDropdown" asp-for="FlatType" class="form-control">
+                                    <option value="">--Select Flat Type--</option>
+                                    <option value="Residential">Residential</option>
+                                    <option value="Commercial">Commercial</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="FloorLbl">Floor</label>
+                                <input type="text" class="form-control" id="FloorTxt" asp-for="Floor" placeholder="Enter Floor">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="NoOfRoomsLbl">No Of Rooms</label>
+                                <input type="text" class="form-control" id="NoOfRoomsTxt" asp-for="NoOfRooms" placeholder="Enter No Of Rooms">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="flatSizeLbl">Size</label>
+                                <input type="number" class="form-control" id="flatSizeTxt" asp-for="Size" placeholder="Enter Flat Size">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="RentAmountLbl">Rent Amount</label>
+                                <input class="form-control" id="RentAmountTxt" asp-for="RentAmount" placeholder="Enter Rent Amount" type="number" step="0.01">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="custom-control custom-checkbox">
+                                    <input asp-for="IsOccupied" type="checkbox" checked class="custom-control-input" />
+                                    <label asp-for="IsOccupied" class="custom-control-label">Is Occupied</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <button class="btn btn-primary" asp-action="Update" asp-controller="FlatManagement" type="submit">Update Flat</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+    <script src="~/assets/js/pages/form-validation.init.js"></script>
+    <script src="~/assets/js/edit-property.js"></script>
+}
